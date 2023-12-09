@@ -1,16 +1,16 @@
 
 export interface CreatePostFormType {
-    name: String
-    prompt: String
-    photo: String
+    name: string
+    prompt: string
+    photo: string
 }
 
 export interface FormFieldType {
-    labelName: String
-    type: String
-    name: String
-    placeholder: String
-    value: String
+    labelName: string
+    type: string
+    name: string
+    placeholder: string
+    value: string
     handleChange?: any
     isSurpriseMe?: any
     handleSurpriseMe?: any
