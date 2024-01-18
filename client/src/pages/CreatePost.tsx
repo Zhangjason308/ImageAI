@@ -21,7 +21,7 @@ const CreatePost = () => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({prompt: form.prompt})
+					body: JSON.stringify({prompt: form.prompt}),
 				})
 
 				const data = await response.json()
@@ -37,8 +37,31 @@ const CreatePost = () => {
 		}
 	}
 
-	function handleSubmit(): any {
+	async function handleSubmit(e: any): Promise<any> {
+		e.preventDefault()
 
+		if(form.prompt && form.photo) {
+			setloading(true)
+
+			try {
+				const response = await fetch('http://localhost:8080/api/v1/post', {
+					method: 'POST',
+					headers: {
+						'Content-Type' : 'application/json',
+					},
+					body: JSON.stringify(form),
+				})
+
+				await response.json()
+				navigate('/')
+			} catch (error) {
+				alert(error)
+			} finally {
+				setloading(false)
+			} 
+		} else {
+			alert('Please enter a prompt and generate an image')
+		}
 	}
 	function handleChange(e: any): any {
 		setForm({...form, [e.target.name]: e.target.value})
@@ -60,7 +83,7 @@ const CreatePost = () => {
 			<form className='mt-16 max-w-3xl' onSubmit={handleSubmit} action="">
 				<div className="flex flex-col gap-5">
 					<FormField labelName='Your Name' type='text' name='name' placeholder='Jason Zhang' value={form.name} handleChange={handleChange}/>
-					<FormField labelName='Prompt' type='text' name='name' placeholder='A giant poop emoji' value={form.prompt} handleChange={handleChange} isSurpriseMe handleSurpriseMe={handleSurpriseMe}/>
+					<FormField labelName='Prompt' type='text' name='prompt' placeholder='A giant poop emoji' value={form.prompt} handleChange={handleChange} isSurpriseMe handleSurpriseMe={handleSurpriseMe}/>
 					<div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
 						{form.photo ? (
 							<img src={form.photo} alt={form.prompt} className='w-full h-full object-contain' />
